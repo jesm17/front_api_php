@@ -1,0 +1,227 @@
+<body>
+  <app-nav></app-nav>
+  <div>
+    <div id="search">
+      <div class="d-flex justify-content-end">
+        <div class="p-1 m-1">
+          <form [formGroup]="searchForm">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Buscar pokemon"
+              aria-label="Search"
+              formControlName="name"
+              [(ngModel)]="shearh.name"
+            />
+          </form>
+        </div>
+        <div class="p-1 m-1">
+          <button
+            class="btn btn-outline-success"
+            [disabled]="searchForm.invalid"
+            (click)="getOnePokemon(shearh.name)"
+          >
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row w-100" *ngIf="hiddenP">
+      <div
+        class="col-4 col-sm-12 col-md-6 col-lg-4 col-lg-6 col-xl-4 col-xxl-4"
+        id="container-card"
+        *ngFor="let pokemon of pokemon"
+      >
+        <div class="card p-2 m-2 w-auto">
+          <div class="d-flex justify-content-center text-uppercase">
+            {{ pokemon.name }}
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="ps-1 m-1">
+              <img
+                src="{{
+                  pokemon.sprites.front_default
+                    ? pokemon.sprites.front_default
+                    : 'https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png'
+                }}"
+                alt=""
+              />
+            </div>
+            <div class="ps-1 m-1" id="details">
+              Tipo:
+              <div *ngFor="let types of pokemon.types">
+                {{ types.type.name }}
+              </div>
+            </div>
+            <div class="ps-1 m-1" id="details">
+              Habilidades:
+              <div *ngFor="let abilities of pokemon.abilities">
+                {{ abilities.ability.name }}
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center mt-2">
+            <button
+              class="btn btn-primary me-1"
+              data-bs-toggle="modal"
+              data-bs-target="#pokemonDateils"
+              (click)="details(pokemon.name)"
+            >
+              Ver detalles
+            </button>
+            <button
+              class="btn btn-success"
+              id="addFav"
+              (click)="addFavorites(pokemon.name)"
+              *ngIf="pokemon.isFavorite == false"
+            >
+              Agregar a mis favoritos
+            </button>
+            <button
+              class="btn btn-danger"
+              (click)="removeFavorite(pokemon.favoriteId)"
+              *ngIf="pokemon.isFavorite == true"
+            >
+              Eliminar de favoritos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center p-3" *ngIf="hiddenP">
+      <button
+        class="btn btn-danger m-1 p-1"
+        *ngIf="hidden"
+        (click)="backPokemon()"
+      >
+        <i class="bi bi-chevron-double-left"></i>Atras
+      </button>
+      <div class="d-flex justify-content-center" id="pages">
+        <div class="p-1 m-1 d-flex align-items-center">
+          Pagina: {{ currentPage }} de: {{ totalPages }}
+        </div>
+      </div>
+      <button
+        class="btn btn-success m-1 p-1"
+        (click)="nextPokemon()"
+        *ngIf="isVisibleButtonNext"
+      >
+        Siguiente<i class="bi bi-chevron-double-right"></i>
+      </button>
+    </div>
+    <div
+      class="d-flex justify-content-center"
+      *ngFor="let onePokemon of onePokemon"
+    >
+      <div class="card p-2 m-2">
+        <div class="d-flex justify-content-center text-uppercase">
+          {{ onePokemon.name }}
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="p-1 m-1">
+            <img src="{{ onePokemon.sprites.front_default }}" alt="" />
+          </div>
+          <div class="p-1 m-1">
+            Tipo:
+            <div *ngFor="let types of onePokemon.types">
+              {{ types.type.name }}
+            </div>
+          </div>
+          <div class="p-1 m-1">
+            Habilidades:
+            <div *ngFor="let abilities of onePokemon.abilities">
+              {{ abilities.ability.name }}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="row row-cols-2">
+            <div class="col" *ngFor="let stast of onePokemon.stats">
+              {{ stast.stat.name }}
+
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-label="Basic example"
+                  style="width: {{ stast.base_stat }}%"
+                  aria-valuenow="25"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="pokemonDateils"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            {{ pokemonDetail[0].name | uppercase }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-center">
+
+            <img
+            src="{{
+              pokemonDetail[0].sprites.front_default
+              ? pokemonDetail[0].sprites.front_default
+              : 'https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png'
+            }}"
+            alt=""
+            />
+          </div>
+          <div id="stat">
+            <p>Estadisticas:</p>
+            <div class="row">
+              <div
+                class="col-6 col-sm-6 col-md-6 col-lg-6 col-lg-6 col-xl-6"
+                *ngFor="let stast of pokemonDetail[0].stats"
+              >
+                {{ stast.stat.name | uppercase}}
+
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    aria-label="Basic example"
+                    style="width: {{ stast.base_stat }}%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

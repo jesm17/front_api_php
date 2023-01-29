@@ -1,0 +1,117 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+/>
+<main>
+  <div class="d-flex justify-content-center mt-4">
+    <div class="w-75">
+      <div class="card text-center w-100">
+        <div class="d-flex justify-content-center">
+          <img
+            class="card-img-top w-25 h-50"
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+            alt="Title"
+          />
+        </div>
+        <div class="card-body">
+          <div class="w-100">
+            <h3 class="card-title fw-bold">Iniciar sesión</h3>
+            <div class="w-100">
+              <form [formGroup]="loginForm">
+                <div class="d-flex justify-content-center">
+                  <div class="w-75">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Email</mat-label>
+                      <input
+                        matInput
+                        placeholder="user@example.com"
+                        required
+                        formControlName="email"
+                        [(ngModel)]="data.email"
+                      />
+
+                      <mat-error
+                        *ngIf="
+                          loginForm.controls['email'].errors &&
+                          loginForm.get('email')?.hasError('required')
+                        "
+                      >
+                        Este campo es requerido
+                      </mat-error>
+                      <mat-error
+                        *ngIf="
+                          loginForm.controls['email'].errors &&
+                          loginForm.get('email')?.hasError('email')
+                        "
+                      >
+                        Este campo debe ser un correo electronico
+                      </mat-error>
+                      <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <div class="w-75">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Contraseña</mat-label>
+                      <input
+                        matInput
+                        placeholder="user@example.com"
+                        required
+                        formControlName="password"
+                        [(ngModel)]="data.password"
+                        [type]="hide ? 'password' : 'text'"
+                      />
+                      <button
+                        mat-icon-button
+                        matSuffix
+                        (click)="hide = !hide"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide"
+                      >
+                        <mat-icon>{{
+                          hide ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      <mat-error
+                        *ngIf="
+                          loginForm.controls['password'].errors &&
+                          loginForm.get('password')?.hasError('required')
+                        "
+                      >
+                        Este campo es requerido
+                      </mat-error>
+                      <mat-error
+                        *ngIf="
+                          loginForm.controls['password'].errors &&
+                          loginForm.get('password')?.hasError('minlength')
+                        "
+                      >
+                        La contraseña debe ser minimo de 8 caracteres
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button
+                class="btn btn-success"
+                type="submit"
+                [disabled]="loginForm.invalid"
+                (click)="login()"
+              >
+                Ingresar <i class="bi bi-box-arrow-in-right"></i>
+              </button>
+            </div>
+            <div>
+              <a [routerLink]="['/register']" class="btn btn-primary mt-1"
+                >¿No tienes cuenta? registrate ahora</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

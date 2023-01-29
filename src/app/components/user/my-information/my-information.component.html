@@ -1,0 +1,62 @@
+<body>
+  <app-nav></app-nav>
+  <div class="d-flex justify-content-center">
+    <div class="card text-center w-50">
+      <div class="card-body">
+        <h4 class="card-title">Informacion adicional</h4>
+        <form [formGroup]="phoneForm">
+          <div>Nombre: {{ userInfo.name | uppercase }}</div>
+          <div>Correo: {{ userInfo.email | uppercase }}</div>
+          <div>Dirrección: {{ userInfo.address | uppercase }}</div>
+          <div>Fecha nacimiento: {{ userInfo.birthdate }}</div>
+          <div>Ciudad: {{ userInfo.city | uppercase }}</div>
+          <!-- <div>Edad: {{ userInfo.age }}</div>
+          <div>Numero celular {{ userInfo.phone_number }}</div> -->
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Edad</mat-label>
+              <input
+                matInput
+                placeholder="18"
+                type="number"
+                min="0"
+                formControlName="age"
+                [(ngModel)]="userInfo.age"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Numero de celular</mat-label>
+              <input
+                matInput
+                placeholder="3000000000"
+                type="number"
+                formControlName="phone"
+                [(ngModel)]="userInfo.phone_number"
+              />
+
+              <mat-error
+                *ngIf="
+                  phoneForm.controls['phone'].errors &&
+                  phoneForm.get('phone')?.hasError('max')
+                "
+              >
+                El maximo de caracteres es 10
+              </mat-error>
+
+              <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+            </mat-form-field>
+          </div>
+        </form>
+        <button
+          class="btn btn-success"
+          (click)="updateInfo()"
+          [disabled]="phoneForm.invalid"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
