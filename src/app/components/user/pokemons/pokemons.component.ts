@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 export class PokemonsComponent {
   searchForm!: FormGroup;
   pokemons: any = [];
-  pokemon: any = [];
+  pokemon: any = [{ name: '', sprites: { front_default: '' } }];
   onePokemon: any = [];
   l: any = 12; // limit
   o: any = 0; // offset
@@ -151,7 +151,8 @@ export class PokemonsComponent {
     this.getPokemons();
   }
   getOnePokemon(id: any) {
-    this.pokemonService.getOnePokemon(id).subscribe(
+
+    this.pokemonService.getOnePokemon(id.toLowerCase()).subscribe(
       (res: any) => {
         this.onePokemon[0] = res;
         this.hiddenP = false;
