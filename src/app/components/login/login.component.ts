@@ -3,7 +3,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { Login } from 'src/app/models/login';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login',
@@ -14,6 +14,7 @@ export class LoginComponent {
   constructor(
     private loginService: LoginService,
     private router: Router,
+    private routere: ActivatedRoute,
     private _snackBar: MatSnackBar
   ) {
     this.initForm();
@@ -36,6 +37,7 @@ export class LoginComponent {
         sessionStorage.setItem('token', res.token);
         sessionStorage.setItem('user_id', res.id);
         this.openSnackBar('Bienvenido');
+
         this.router.navigate(['/pokemons']);
       },
       (err) => {

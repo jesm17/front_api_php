@@ -16,7 +16,7 @@ export class RegisterComponent {
   constructor(
     private userService: UserService,
     private _snackBar: MatSnackBar,
-    private router:Router
+    private router: Router
   ) {
     this.registerForm();
   }
@@ -38,7 +38,6 @@ export class RegisterComponent {
       (res: any) => {
         if (res.status == 201) {
           this.openSnackBar(res.message);
-          this.router.navigate(['/login']);
         } else {
         }
       },
